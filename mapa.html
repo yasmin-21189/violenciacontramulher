@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espelho Meu - Mapa Paranaguá</title
+    >
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="icon" href="espelhomeu.jpg" type="image/x-icon">
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+     background: url('cadastro\ foto.jpg') no-repeat center center fixed;
+     background-size: cover;
+     height: 100vh;
+      overflow: hidden;
+    }
+    #location-status {
+      margin: 10px;
+      padding: 10px 15px;
+      border-radius: 12px;
+      background-color: rgba(252, 77, 129, 0.8);
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      max-width: 95%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    #map {
+      width: 95%;
+      flex: 1;
+      min-height: 400px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+    @media (max-width: 600px) {
+      #location-status { font-size: 14px; padding: 8px 10px; }
+      #map { min-height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="location-status">🔍 Buscando sua localização...</div>
+<div id="map"></div>
+
+<script>
+  // Inicializa mapa centralizado em Paranaguá
+  var map = L.map('map').setView([-25.5202, -48.5200], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Função para criar marcadores
+  function createMarker(lat, lng, name, address, phone, imgUrl) {
+    var icon = L.icon({
+      iconUrl: imgUrl,
+      iconSize: [50, 50],   // ajuste o tamanho conforme sua imagem
+      iconAnchor: [22, 45]  // centralização
+    });
+    return L.marker([lat, lng], { icon }).bindPopup(`
+      <b>${name}</b><br>
+      ${address}<br>
+      Telefone: ${phone}<br>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank">📍 Como chegar</a>
+    `);
+  }
+
+
+  var icons = {
+    hospital: "localizaçao.png",
+    bombeiro: "localizaçao.png",
+    pm: "localizaçao.png",
+    user: "boneca.png"
+  };
+
+  
+  var hospitais = [
+    {lat: -25.51544, lng: -48.51102, name: "Hospital Paranaguá", phone: "(41) 3721-8000", address: "R. Nestor Víctor, 222 - João Gualberto"},
+    {lat: -25.52489, lng: -48.51449, name: "Hospital Regional do Litoral", phone: "(41) 3420-7400", address: "Rua Presidente Getúlio Vargas, 222 – Palmital"}
+  ];
+
+  var bombeiros = [
+    {lat: -25.51328, lng: -48.50011, name: "1º Sub Grupamento de Bombeiros", phone: "(41)34230-4041", address: "R. Visc. de Nácar, 266 - Centro Histórico"},
+    {lat: -25.56271, lng: -48.56503, name: "8º Batalhão de Bombeiros - Litoral", phone: "(41)3427-2006", address: "Av. Gov. Bento Munhoz da Rocha Neto, 5445 - Nílson Neves"}
+  ];
+
+  var batalhaoPM = [
+    {lat: -25.52195, lng: -48.51133, name: "Delegacia da Mulher", phone: "(41)3423-1115", address: "Rua Vieira dos Santos, 200 - Centro Histórico"},
+    {lat: -25.51052, lng: -48.52227, name: "9° Batalhão de Polícia Militar", phone: "(41)3420-9800", address: "R. Prof. Cleto, 1760 - Alto São Sebastião"}
+  ];
+
+
+  hospitais.forEach(h => createMarker(h.lat, h.lng, h.name, h.address, h.phone, icons.hospital).addTo(map));
+  bombeiros.forEach(b => createMarker(b.lat, b.lng, b.name, b.address, b.phone, icons.bombeiro).addTo(map));
+  batalhaoPM.forEach(p => createMarker(p.lat, p.lng, p.name, p.address, p.phone, icons.pm).addTo(map));
+
+
+  function getUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var userLat = position.coords.latitude;
+        var userLng = position.coords.longitude;
+
+        var userIcon = L.icon({
+          iconUrl: icons.user,
+          iconSize: [50, 50],
+          iconAnchor: [25, 50]
+        });
+
+        L.marker([userLat, userLng], { icon: userIcon })
+          .addTo(map)
+          .bindPopup("📍 Você está aqui").openPopup();
+
+        map.setView([userLat, userLng], 13);
+
+        let closestStation = null;
+        let closestDistance = Infinity;
+
+        hospitais.concat(bombeiros, batalhaoPM).forEach(function(station) {
+          var distance = map.distance([userLat, userLng], [station.lat, station.lng]);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestStation = station;
+          }
+        });
+
+        if (closestStation) {
+          document.getElementById('location-status').innerHTML =
+            `🧍‍♀️ Você está a <b>${Math.round(closestDistance)} metros</b> da unidade mais próxima: <b>${closestStation.name}</b>`;
+        }
+
+      }, function() {
+        document.getElementById('location-status').innerText = "❌ Não foi possível obter sua localização.";
+      });
+    } else {
+      document.getElementById('location-status').innerText = "❌ Geolocalização não suportada pelo navegador.";
+    }
+  }
+
+  getUserLocation();
+</script>
+</body>
+</html>
+

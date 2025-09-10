@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espelho Meu - Tutoriais</title>
+  <link rel="icon" href="espelhomeu.jpg" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('cadastro foto.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .app {
+      position: relative;
+      width: 375px;
+      height: 100vh;
+      border-radius: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: rgba(255,255,255,0.4); /* fundo levemente translúcido */
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      font-weight: 600;
+      font-size: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .tutorials {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: #fff0f6;
+      border-radius: 20px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    footer {
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid #eee;
+    }
+
+    .btn {
+      background: none;
+      border: 2px solid #e86a92;
+      color: #e86a92;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #e86a92;
+      color: #fff;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>Tutoriais</header>
+
+    <div class="tutorials">
+      <div class="card">
+        <img src="batom.png" alt="Batom">
+        <h3>Batom Vermelho</h3>
+      </div>
+      <div class="card">
+        <img src="base.png" alt="Base">
+        <h3>Base Uniforme</h3>
+      </div>
+      <div class="card">
+        <img src="blush.png" alt="Blush">
+        <h3>Blush</h3>
+      </div>
+      <div class="card">
+        <img src="delineador.png" alt="Delineador">
+        <h3>Toque Floral</h3>
+      </div>
+    </div>
+
+    <footer>
+      <button class="btn" onclick="window.location.href='mapa.html'">Saber Mais</button>
+    </footer>
+  </div>
+</body>
+</html>

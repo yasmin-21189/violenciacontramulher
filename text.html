@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espelho Meu</title>
+  <link rel="shortcut icon" href="espelhomeu.jpg" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url('pagina principal.jpg'); 
+      background-size: cover; 
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      height: 100vh;
+      color: rgb(155, 31, 124);
+      overflow: hidden;
+      padding-right: 50px;
+    }
+
+    .container {
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+      background-color: rgba(255, 255, 255, 0.089);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #0a0601;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #690453;
+      font-size: 16px;
+      background-color: rgba(245, 239, 239, 0.8);
+      color: #080808;
+    }
+
+    button {
+      padding: 14px 30px;
+      background-color: #cf065a;
+      color: rgb(248, 246, 246);
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #940233;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .link-account {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .language-select {
+      margin-top: 20px;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .password-container span {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 95%;
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      input {
+        font-size: 14px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 12px 20px;
+      }
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #020202;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Espelho Meu</h1>
+
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Usuário" required>
+
+      <!-- Campo de senha com olhinho -->
+      <div class="password-container">
+        <input type="password" id="password" placeholder="Senha" required style="padding-right: 40px;">
+        <span id="togglePassword">👁️</span>
+      </div>
+
+      <button type="submit">Entrar</button>
+    </form>
+
+    <p class="error-message" id="errorMessage" style="display: none;">Usuário ou senha inválidos.</p>
+
+    <div class="language-select">
+      <label for="language" style="color: #0c0c0c;">Escolha seu idioma:</label>
+      <select id="language">
+        <option value="pt-br">Português</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Script de login -->
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('errorMessage');
+
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+
+      if (username === 'yasmin123' && password === 'Senhasegura') {
+        window.location.href = 'mulher.html';
+      } else {
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
+
+  <!-- Script de tradução -->
+  <script>
+    const languageSelect = document.getElementById("language");
+
+    const translations = {
+      "pt-br": {
+        title: "Espelho Meu",
+        username: "Usuário",
+        password: "Senha",
+        loginButton: "Entrar",
+        error: "Usuário ou senha inválidos.",
+        noAccount: "Não tem uma conta? Clique aqui para se cadastrar.",
+        languageLabel: "Escolha seu idioma:"
+      },
+      "en": {
+        title: "My Mirror",
+        username: "Username",
+        password: "Password",
+        loginButton: "Login",
+        error: "Invalid username or password.",
+        noAccount: "Don't have an account? Click here to sign up.",
+        languageLabel: "Choose your language:"
+      }
+    };
+
+    function updateLanguage(lang) {
+      const t = translations[lang];
+      document.querySelector("h1").innerText = t.title;
+      document.getElementById("username").placeholder = t.username;
+      document.getElementById("password").placeholder = t.password;
+      document.querySelector("button").innerText = t.loginButton;
+      document.getElementById("errorMessage").innerText = t.error;
+      document.querySelector(".link-account a").innerText = t.noAccount;
+      document.querySelector("label[for='language']").innerText = t.languageLabel;
+    }
+
+    languageSelect.addEventListener("change", function () {
+      updateLanguage(this.value);
+    });
+
+    updateLanguage("pt-br");
+  </script>
+
+  <!-- Script do olhinho -->
+  <script>
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordField = document.getElementById("password");
+
+    togglePassword.addEventListener("click", function () {
+      const isPassword = passwordField.type === "password";
+      passwordField.type = isPassword ? "text" : "password";
+      togglePassword.textContent = isPassword ? "🙈" : "👁️";
+    });
+  </script>
+
+</body>
+</html>
